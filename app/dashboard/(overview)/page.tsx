@@ -21,7 +21,7 @@ import CardWrapper from "@/app/ui/dashboard/cards";
 
 export default async function Page() {
   const revenue = await fetchRevenue();
-  const latestInvoices = await fetchLatestInvoices();
+ 
   const {
     numberOfCustomers,
     numberOfInvoices,
@@ -57,7 +57,7 @@ export default async function Page() {
         </Suspense>
         {/* <LatestInvoices latestInvoices={latestInvoices} /> */}
         <Suspense fallback={<LatestInvoicesSkeleton />}>
-          <LatestInvoices latestInvoices={latestInvoices} />
+          <LatestInvoices />
         </Suspense>
       </div>
     </main>

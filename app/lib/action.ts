@@ -16,14 +16,23 @@ const CreateInvoice = FormSchema.omit({id: true, date: true});
 
 export async function createInvoice(formData: FormData) {
 
-    const {amount, customerId, status} = CreateInvoice.parse({
-        customerId: formData.get('customerId'),
-        amount: formData.get('amount'),
-        status: formData.get('status')
-    });
-    const amountInCents = amount * 100;
-    const date = new Date().toISOString().split('T')[0];
+   console.log('formData', formData);
     try {
+        const {amount, customerId, status} = CreateInvoice.parse({
+            customerId: formData.get('customerId'),
+            amount: formData.get('amount'),
+            status: formData.get('status')
+        });
+
+   console.log('T-amount', amount);
+   console.log('T-customerId', customerId);
+   console.log('T-status', status);
+
+
+
+        const amountInCents = amount * 100;
+        const date = new Date().toISOString().split('T')[0];
+
         await sql`
         INSERT INTO invoices (customer_id, amount, status, date)
         VALUES (${customerId}, ${amountInCents}, ${status}, ${date})
@@ -61,4 +70,9 @@ export async function updateInvoice(id: string, formData: FormData) {
         console.log('error', error)
     }
 }
+
+export async function deleteInvoice(id: string) {
+    await sql`DELETE FROM invoices WHERE id = ${id}`;
+    revalidatePath('/dashboard/invoices');
+  }
 
