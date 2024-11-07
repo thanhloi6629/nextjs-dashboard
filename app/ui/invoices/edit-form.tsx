@@ -10,6 +10,7 @@ import {
 import Link from 'next/link';
 import { Button } from '@/app/ui/button';
 import { updateInvoice } from '@/app/lib/action';
+import { useRouter } from 'next/navigation';
 
 export default function EditInvoiceForm({
   invoice,
@@ -19,8 +20,17 @@ export default function EditInvoiceForm({
   customers: CustomerField[];
 }) {
   const updateInvoiceWithId = updateInvoice.bind(null, invoice.id);
+  const router = useRouter();
+  
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    await updateInvoiceWithId
+    router.push('/dashboard/invoices');
+  }
+  
   return (
-    <form action={updateInvoiceWithId}>
+    <form onSubmit={handleSubmit}>
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
         {/* Customer Name */}
         <div className="mb-4">
