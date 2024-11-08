@@ -38,26 +38,26 @@ export default async function CustomersTable({
                               width={28}
                               height={28}
                             />
-                            <p>{customer.name}</p>
+                            <span>{customer.name}</span>
                           </div>
                         </div>
-                        <p className="text-sm text-gray-500">
+                        <span className="text-sm text-gray-500">
                           {customer.email}
-                        </p>
+                        </span>
                       </div>
                     </div>
                     <div className="flex w-full items-center justify-between border-b py-5">
                       <div className="flex w-1/2 flex-col">
-                        <p className="text-xs">Pending</p>
-                        <p className="font-medium">{customer.total_pending}</p>
+                        <span className="text-xs">Pending</span>
+                        <span className="font-medium">{customer.total_pending}</span>
                       </div>
                       <div className="flex w-1/2 flex-col">
-                        <p className="text-xs">Paid</p>
-                        <p className="font-medium">{customer.total_paid}</p>
+                        <span className="text-xs">Paid</span>
+                        <span className="font-medium">{customer.total_paid}</span>
                       </div>
                     </div>
                     <div className="pt-4 text-sm">
-                      <p>{customer.total_invoices} invoices</p>
+                      <span>{customer.total_invoices} invoices</span>
                     </div>
                   </div>
                 ))}
@@ -95,7 +95,7 @@ export default async function CustomersTable({
                             width={28}
                             height={28}
                           />
-                          <p>{customer.name}</p>
+                          <span>{customer.name}</span>
                         </div>
                       </td>
                       <td className="whitespace-nowrap bg-white px-4 py-5 text-sm">
