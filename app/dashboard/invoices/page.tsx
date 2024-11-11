@@ -1,6 +1,5 @@
 /** @format */
 
-import NavLinks from "@/app/ui/dashboard/nav-links";
 import React from "react";
 import Pagination from "@/app/ui/invoices/pagination";
 import Search from "@/app/ui/search";

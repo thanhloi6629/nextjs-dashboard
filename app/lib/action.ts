@@ -3,6 +3,7 @@ import { sql } from '@vercel/postgres';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { string, z } from 'zod';
+import useToastify from '../hooks/useToastify';
 
 export type State = {
     errors?: {
@@ -79,11 +80,14 @@ export async function createInvoice(prevState: State , formData: FormData) {
 const UpdateInvoice = FormSchema.omit({ id: true, date: true });
 
 export async function updateInvoice(id: string, prevState: State, formData: FormData) {
+    const notify = useToastify()
+    const {errorNotification, successNotification} = notify
     const rawFormData = {
         customerId: formData.get('customerId'),
         amount: formData.get('amount'),
         status: formData.get('status')
     };
+
     const validatedFields = UpdateInvoice.safeParse(rawFormData);
     if (!validatedFields.success) {
         return {
@@ -95,49 +99,31 @@ export async function updateInvoice(id: string, prevState: State, formData: Form
     const { customerId, amount, status } = validatedFields.data;
     const amountInCents = amount * 100;
     // const date = new Date().toISOString().split('T')[0];
+    
     try {
-        await sql`
+        const result = await sql`
         UPDATE invoices
         SET customer_id = ${customerId}, amount = ${amountInCents}, status = ${status}
         WHERE id = ${id}
         `;
+        if(result.rowCount > 0) {
+            console.log('Cập nhật thành công')
+            successNotification();
+        //     revalidatePath('dashboard/invoices');
+        //     redirect('dashboard/invoices');
+        // } else {
+        //     console.log('Cập nhật có lỗi')
+        }
+     
     } catch (error) {
-        console.log('error', error)
+        console.log('L-error', error);
+        errorNotification();
     }
-    revalidatePath('dashboard/invoices');
-    redirect('dashboard/invoices');
+    revalidatePath('/dashboard/invoices');
+    redirect('/dashboard/invoices');
+   
 }
 
-
-export async function updateInvoiceV2(prevState: State, id: string, formData: FormData) {
-    const rawFormData = {
-        customerId: formData.get('customerId'),
-        amount: formData.get('amount'),
-        status: formData.get('status')
-    };
-    const validatedFields = UpdateInvoice.safeParse(rawFormData);
-    if (!validatedFields.success) {
-        return {
-          errors: validatedFields.error.flatten().fieldErrors,
-          message: 'Missing Fields. Failed to Update Invoice.',
-        };
-    }
-
-    const { customerId, amount, status } = validatedFields.data;
-    const amountInCents = amount * 100;
-    // const date = new Date().toISOString().split('T')[0];
-    try {
-        await sql`
-        UPDATE invoices
-        SET customer_id = ${customerId}, amount = ${amountInCents}, status = ${status}
-        WHERE id = ${id}
-        `;
-    } catch (error) {
-        console.log('error', error)
-    }
-    revalidatePath('dashboard/invoices');
-    redirect('dashboard/invoices');
-}
 
 
 export async function deleteInvoice(id: string) {

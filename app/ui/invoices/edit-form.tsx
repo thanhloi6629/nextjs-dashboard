@@ -9,9 +9,11 @@ import {
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { Button } from '@/app/ui/button';
-import { State, updateInvoice, updateInvoiceV2 } from '@/app/lib/action';
+import { State, updateInvoice } from '@/app/lib/action';
 import { useRouter } from 'next/navigation';
 import { useActionState } from 'react';
+import { ToastContainer } from 'react-toastify';
+
 
 export default function EditInvoiceForm({
   invoice,
@@ -22,10 +24,7 @@ export default function EditInvoiceForm({
 }) {
   const initialState: State = { message: null, errors: {} };
   const updateInvoiceWithId = updateInvoice.bind(null, invoice.id)
-
-  const [state, formAction] = useActionState(updateInvoiceWithId, initialState);
-
-  // const router = useRouter();
+  const [state, formAction] = useActionState(updateInvoiceWithId, initialState)
   
   // async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
   //   event.preventDefault();
@@ -33,9 +32,11 @@ export default function EditInvoiceForm({
   //   await updateInvoiceWithId
   //   router.push('/dashboard/invoices');
   // }
-  
+
   return (
+    <>
     <form action={formAction}>
+      <input type="hidden" name="id" value={invoice.id} />
       <div className="rounded-md bg-gray-50 p-4 md:p-6">
         {/* Customer Name */}
         <div className="mb-4">
@@ -164,5 +165,7 @@ export default function EditInvoiceForm({
         <Button type="submit">Edit Invoice</Button>
       </div>
     </form>
+     <ToastContainer />
+     </>
   );
 }

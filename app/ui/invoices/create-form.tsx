@@ -9,22 +9,28 @@ import {
 } from '@heroicons/react/24/outline';
 import { Button } from '@/app/ui/button';
 import { createInvoice, State } from '@/app/lib/action';
-import { useRouter } from 'next/navigation';
-import { useActionState } from 'react';
-import { init } from 'next/dist/compiled/webpack/webpack';
+import { useActionState, useEffect } from 'react';
+
 
 export default function Form({ customers }: { customers: CustomerField[] }) {
  const initialState: State  = {message: null, errors: {}}
-
+  
   const [state, formAction] = useActionState(createInvoice, initialState)
+ 
 
-  const router = useRouter();
   // async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
   //   event.preventDefault();
   //   const formData = new FormData(event.currentTarget);
-  //   // await createInvoice(formData);
+  //   await createInvoice(state, formData);
   //   router.push('/dashboard/invoices');
   // }
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      // Logic only runs on the client
+      console.log('This runs only on the client side');
+    }
+  }, []);
 
 
   return (
