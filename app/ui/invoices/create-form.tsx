@@ -29,6 +29,7 @@ export default function Form({ customers }: { customers: CustomerField[] }) {
     if (typeof window !== 'undefined') {
       // Logic only runs on the client
       console.log('This runs only on the client side');
+      console.log('cccc')
     }
   }, []);
 
