@@ -1,5 +1,5 @@
-'use client';
- 
+"use client";
+
 export default function Error({
   error,
   reset,
@@ -7,8 +7,6 @@ export default function Error({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
-  
-
   return (
     <main className="flex h-full flex-col items-center justify-center">
       <h2 className="text-center">Something went wrong!</h2>
@@ -19,6 +17,7 @@ export default function Error({
           () => reset()
         }
       >
+        {error.message}
         Try again
       </button>
     </main>
